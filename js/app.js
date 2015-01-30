@@ -2,10 +2,12 @@ var app = angular.module('rtfmApp', ['ngRoute', 'firebase']);
 
 	app.config(function($routeProvider){
 		$routeProvider
+
 			.when('/login', {
 				templateUrl: 'js/login/login.html',
 				controller: 'loginCtrl'
 			})			
+
 			.when('/threads', {
 				templateUrl: 'js/threads/threads.html',
 				controller: 'threadsCtrl',
@@ -15,13 +17,23 @@ var app = angular.module('rtfmApp', ['ngRoute', 'firebase']);
 					}
 				}
 			})			
-			.when('/threads/:threadId', {
-				templateUrl: 'js/threads/threads.html',
-				controller: 'threadsCtrl'
+
+			.when('/thread/:threadId', {
+				templateUrl: 'js/threads/thread.html',
+				controller: 'threadCtrl',
+				resolve: {
+					threadRef: function(threadsService, $route){
+						return threadsService.getThread($route.current.params.threadId);
+					},
+					commentsRef: function(threadsService, $route){
+			      		return threadsService.getComments($route.current.params.threadId);
+			    	}
+				}		
 			})
+			
 			.otherwise({
 				redirectTo: '/login'
-			})
+			});
 
 			
 	}).run(function($rootScope, $location, EnvironmentService){

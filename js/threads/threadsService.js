@@ -1,13 +1,19 @@
 angular.module('rtfmApp');
 
 app.service('threadsService', function($firebase, EnvironmentService){
+
 	var firebaseUrl = EnvironmentService.getEnv().firebase;
+
 	this.getThreads = function(){
 		return $firebase(new Firebase(firebaseUrl + '/threads'));
 	}
 
 	this.getThread = function(id){
 		return $firebase(new Firebase(firebaseUrl + '/threads/' + id))
+	}
+
+	this.getComments = function(id){
+		return $firebase(new Firebase(firebaseUrl + '/threads' + id + '/comments'));
 	}
 })
 
